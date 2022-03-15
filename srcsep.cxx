@@ -9,7 +9,7 @@
 #include "audioio.h"
 #include "Fir1.h"
 int main(int argc, char* argv[]){
-    if (argc != 3){
+    if (argc != 4){
         std::cerr << "usage: " << argv[0] << " [wet file] [dry file]"<< std::endl;
     };
     AudioReader wet(argv[1]);
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
     }
     msi = msi / wetVector.size();
     int actTrial(trial < wetVector.size() ? trial : wetVector.size());
-    
+
     // if (trial < wetVector.size()){
     //     actTrial = trial;
     // }else
@@ -71,6 +71,7 @@ int main(int argc, char* argv[]){
     std::cout << "Processing" <<std::endl;
     for (int i = 0; i < dryVector.size(); i++)
     {
+        if(i%1000 == 0){std::cout << i << std::endl;};
         error.push_back(wetVector[i] - fir.filter(dryVector[i]));
         fir.lms_update(error[i]);
     }
@@ -82,13 +83,11 @@ int main(int argc, char* argv[]){
     powerGain = powerGain/error.size();
     powerGain = powerGain/msi;
     std::cout << "Power gain: " << powerGain << std::endl;
-
-    
-    
-
-    
-    
-    
+    AudioWriter FileWriter(argv[3], sr);
+    for (int i = 0; i < error.size(); i++)
+    {
+        FileWriter.write(error[i]);
+    }
     
 
     //std::cout << wetVector << std::endl;

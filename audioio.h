@@ -23,4 +23,15 @@ private:// define enxternaly inaccessable variables and/or functions
         bool eof_ { false };// makes an end of file boolean and is initialised with false
 };
 
+class AudioWriter {
+public:
+        AudioWriter(std::string fname,int sr);
+        ~AudioWriter();
+        void write(double sample);
+private:
+        FILE* pipe;
+        int samp_rate;
+        int index;
+};
+
 #endif

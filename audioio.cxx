@@ -3,6 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include <sstream>
+#include <iostream>
 // including standard ibraries and the header file for the class.
 AudioReader::AudioReader(std::string fname) {//define audio reader class
         std::string cmd("sox '" + fname + "' -t dat -c 1 -");//creates the cmd string
@@ -30,3 +31,34 @@ double AudioReader::get(void) {
         } else
                 return 0;//if end of file return 0
 }
+
+AudioWriter::AudioWriter(std::string fname, int sr){
+        samp_rate = sr;
+        index = 0;
+        std::string cmd("sox -t dat -c 1 -r " + std::to_string(samp_rate) + " - '" + fname + "'");
+        pipe = popen(cmd.c_str(), "w");
+        if (pipe == nullptr){
+                throw std::runtime_error("Couldn't open audiofile");
+        };
+        std::string writestring("; Sample Rate " + samp_rate);
+        fputs(writestring.c_str(), pipe);
+        writestring = "; Channels 1";
+        fputs(writestring.c_str(), pipe);
+};
+AudioWriter::~AudioWriter() {
+        if (pipe != nullptr){
+                pclose(pipe);// if there is a pipe destroy it.
+        };
+               
+}
+void AudioWriter::write(double sample){
+        double time = index/samp_rate;
+        std::string timeIntensitySamp(std::to_string(time) + "  " + std::to_string(sample));
+        std::cout << timeIntensitySamp << std::endl; 
+        fputs(timeIntensitySamp.c_str(), pipe);
+        index +=1;
+
+
+};
+
+        
