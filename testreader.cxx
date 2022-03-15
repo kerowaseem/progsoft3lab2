@@ -14,7 +14,8 @@ int main(int argc, char* argv[])
                 return 1;
         }
                 
-        AudioReader ar(argv[1]);
+        AudioReader ar(argv[1]);//instanciates a audio reader class named ar
+        std::cout << argv[0]<< std::endl;// path to the data files
         
         int sample_count {0};
         
