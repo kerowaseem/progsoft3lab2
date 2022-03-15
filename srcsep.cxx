@@ -40,15 +40,11 @@ int main(int argc, char* argv[]){
       dry.get();  
     };
     
-    double sample(1);
-    while (sample != 0){
-        sample = wet.get();
-        wetVector.push_back(sample);
+    while (!wet.eof()){
+        wetVector.push_back(wet.get());
     };
-    sample = 1;
-    while (sample != 0){
-        sample = dry.get();
-        dryVector.push_back(sample);
+    while (!dry.eof()){
+        dryVector.push_back(dry.get());
     };
     if (wetVector.size() != dryVector.size()){
         std::cerr << "interference and source samples are different lengths"<< std::endl;
@@ -59,13 +55,14 @@ int main(int argc, char* argv[]){
         msi += pow(wetVector[i],2);
     }
     msi = msi / wetVector.size();
-    int actTrial(0);
-    if (trial < wetVector.size()){
-        actTrial = trial;
-    }else
-    {
-        actTrial = wetVector.size();
-    }
+    int actTrial(trial < wetVector.size() ? trial : wetVector.size());
+    
+    // if (trial < wetVector.size()){
+    //     actTrial = trial;
+    // }else
+    // {
+    //     actTrial = wetVector.size();
+    // }
     std::cout << "pre-training ..."<< std::endl;
     for (int i = 0; i < actTrial; i++)
     {
@@ -85,7 +82,7 @@ int main(int argc, char* argv[]){
     powerGain = powerGain/error.size();
     powerGain = powerGain/msi;
     std::cout << "Power gain: " << powerGain << std::endl;
-    
+
     
     
 
