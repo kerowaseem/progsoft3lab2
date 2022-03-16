@@ -33,17 +33,27 @@ double AudioReader::get(void) {
 }
 
 AudioWriter::AudioWriter(std::string fname, int sr){
+        std::cout << "l1" << std::endl;
         samp_rate = sr;
+        std::cout << "l2" << std::endl;
         index = 0;
+        std::cout << "l3" << std::endl;
         std::string cmd("sox -t dat -c 1 -r " + std::to_string(samp_rate) + " - '" + fname + "'");
+        std::cout << "l4" << std::endl;
         pipe = popen(cmd.c_str(), "w");
+        std::cout << "l5" << std::endl;
         if (pipe == nullptr){
                 throw std::runtime_error("Couldn't open audiofile");
         };
-        std::string writestring("; Sample Rate " + samp_rate);
+        std::cout << "l6" << std::endl;
+        std::string writestring = ("; Sample Rate " + std::to_string(samp_rate));
+        std::cout << "l7" << std::endl;
         fputs(writestring.c_str(), pipe);
+        std::cout << "l8" << std::endl;
         writestring = "; Channels 1";
+        std::cout << "l9" << std::endl;
         fputs(writestring.c_str(), pipe);
+        std::cout << "l10" << std::endl;
 };
 AudioWriter::~AudioWriter() {
         if (pipe != nullptr){
@@ -52,9 +62,10 @@ AudioWriter::~AudioWriter() {
                
 }
 void AudioWriter::write(double sample){
+         
         double time = index/samp_rate;
+        std::cout << index << samp_rate <<std::endl;
         std::string timeIntensitySamp(std::to_string(time) + "  " + std::to_string(sample));
-        std::cout << timeIntensitySamp << std::endl; 
         fputs(timeIntensitySamp.c_str(), pipe);
         index +=1;
 

@@ -84,6 +84,7 @@ int main(int argc, char* argv[]){
     powerGain = powerGain/msi;
     std::cout << "Power gain: " << powerGain << std::endl;
     AudioWriter FileWriter(argv[3], sr);
+    std::cout << error.size() <<std::endl;
     for (int i = 0; i < error.size(); i++)
     {
         FileWriter.write(error[i]);
