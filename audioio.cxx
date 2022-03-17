@@ -63,9 +63,9 @@ AudioWriter::~AudioWriter() {
 }
 void AudioWriter::write(double sample){
          
-        double time = index/samp_rate;
-        std::cout << index << samp_rate <<std::endl;
+        double time = (double)index/(double)samp_rate;
         std::string timeIntensitySamp(std::to_string(time) + "  " + std::to_string(sample));
+        std::cout << timeIntensitySamp << " " << index <<std::endl;
         fputs(timeIntensitySamp.c_str(), pipe);
         index +=1;
 
